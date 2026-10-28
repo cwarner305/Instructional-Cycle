@@ -1,0 +1,959 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Responsive Instruction Workshop Hub</title>
+<style>
+:root{
+  --blue:#5f8fc9; --blue-soft:#e7f0ff; --blue-mid:#d7e7fb;
+  --ink:#171717; --muted:#5d5d5d; --paper:#fff; --soft:#f6f6f4; --line:#d9d9d5;
+  --green:#4f9b63; --green-soft:#e6f3e9; --green-mid:#c4e3cb;
+  --yellow:#d4aa21; --yellow-soft:#fff4c8; --yellow-mid:#f2df91;
+  --red:#c95f55; --red-soft:#f8e1de; --red-mid:#efb4ae;
+  --accent:#1b1b1b; --radius:16px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,Helvetica,sans-serif;line-height:1.45}
+button,input,select,textarea{font:inherit}
+a{color:inherit}
+.wrap{width:min(1180px,calc(100% - 32px));margin:auto}
+.topbar{height:8px;background:linear-gradient(90deg,var(--green) 0 33%,var(--yellow) 33% 67%,var(--red) 67% 100%)}
+header{padding:36px 0 26px;border-bottom:1px solid var(--line)}
+.kicker{font-size:.78rem;text-transform:uppercase;letter-spacing:.12em;font-weight:800;color:#555}
+h1{font-size:clamp(2.15rem,5vw,4.6rem);line-height:.98;letter-spacing:-.045em;margin:.25rem 0 .8rem;max-width:980px}
+h2{font-size:clamp(1.65rem,3vw,2.55rem);letter-spacing:-.025em;margin:0 0 10px}
+h3{margin:0 0 7px;font-size:1.16rem}
+p{margin:.5rem 0 1rem}
+.lead{font-size:1.14rem;color:#3d3d3d;max-width:880px}
+.meta{display:flex;gap:9px;flex-wrap:wrap;margin-top:20px}
+.pill{border:1px solid var(--line);border-radius:999px;padding:8px 12px;background:#fff;font-size:.9rem}
+nav{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.96);border-bottom:1px solid var(--line);backdrop-filter:blur(7px)}
+nav .wrap{display:flex;gap:5px;overflow:auto;padding:8px 0}
+nav a{white-space:nowrap;text-decoration:none;font-size:.9rem;font-weight:800;padding:9px 12px;border-radius:9px}
+nav a:hover,nav a:focus{background:var(--soft)}
+section{padding:40px 0}
+section+section{border-top:1px solid var(--line)}
+.intro-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:20px;margin-top:22px}
+.panel{border:1px solid var(--line);border-radius:var(--radius);padding:20px;background:#fff}
+.panel.soft{background:var(--soft)}
+.cycle{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:18px}
+.cycle-step{padding:15px;border-radius:13px;background:#f4f4f2;border:1px solid #e0e0dd;min-height:94px}
+.cycle-step strong{display:block;font-size:1rem;margin-bottom:5px}
+.cycle-arrow{display:flex;align-items:center;justify-content:center;font-weight:900;color:#888}
+.notice{border-left:5px solid #222;padding:13px 15px;background:#f8f8f6;margin-top:16px}
+.color-guide{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+.color-block{border-radius:15px;padding:18px;min-height:145px;border:1px solid rgba(0,0,0,.08)}
+.color-block.green{background:var(--green-soft)}
+.color-block.yellow{background:var(--yellow-soft)}
+.color-block.red{background:var(--red-soft)}
+.color-name{font-size:.8rem;font-weight:900;text-transform:uppercase;letter-spacing:.09em}
+.work-head{display:flex;align-items:end;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.choice-note{max-width:540px;background:#f7f7f5;border-left:4px solid #222;padding:12px 14px}
+.group{margin-top:28px}
+.group-title{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.dot{width:18px;height:18px;border-radius:50%}
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.card{border:1px solid rgba(0,0,0,.12);border-radius:15px;padding:18px;display:flex;flex-direction:column;min-height:230px;transition:transform .16s ease,box-shadow .16s ease}
+.card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.07)}
+.card.blue{background:var(--blue-soft)}
+.card.blue2{background:var(--blue-mid)}
+.card.green{background:var(--green-soft)}
+.card.green2{background:var(--green-mid)}
+.card.yellow{background:var(--yellow-soft)}
+.card.yellow2{background:var(--yellow-mid)}
+.card.red{background:var(--red-soft)}
+.card.red2{background:var(--red-mid)}
+.tag{font-size:.73rem;text-transform:uppercase;letter-spacing:.09em;font-weight:900;opacity:.78}
+.outcome{margin:.45rem 0 .9rem;padding:9px 10px;border:1px solid rgba(0,0,0,.18);background:rgba(255,255,255,.6);border-radius:9px;font-size:.88rem}
+.outcome strong{display:block;font-size:.73rem;text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px}
+.continuum{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin:22px 0 8px;border:1px solid var(--line);border-radius:15px;overflow:hidden}
+.continuum>div{padding:18px}
+.continuum .b{background:var(--blue-soft)}
+.continuum .g{background:var(--green-soft)}
+.continuum .y{background:var(--yellow-soft)}
+.continuum .r{background:var(--red-soft)}
+.continuum h3{margin-bottom:5px}
+.continuum ul{margin:.45rem 0 0;padding-left:1.15rem;font-size:.9rem}
+.qti-shot{border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:12px 0;background:#fff}
+.qti-shot img{width:100%;display:block}
+.qti-shot p{margin:0;padding:9px 11px;font-size:.9rem;color:#444}
+
+.card p{font-size:.95rem}
+.actions{margin-top:auto;display:flex;gap:8px;flex-wrap:wrap}
+.btn{appearance:none;border:0;border-radius:9px;background:#161616;color:#fff;padding:10px 13px;font-weight:800;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;min-height:43px}
+.btn.secondary{background:#fff;color:#161616;border:1px solid #9c9c9c}
+.btn.ghost{background:transparent;color:#161616;border:1px solid rgba(0,0,0,.28)}
+.btn:focus,.choice:focus{outline:3px solid #6aa4d9;outline-offset:2px}
+.example-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:18px}
+.example{border:1px solid var(--line);border-radius:13px;overflow:hidden;background:#fff}
+.example img{display:block;width:100%;height:185px;object-fit:cover;object-position:top}
+.example .cap{padding:10px 12px;font-size:.9rem;color:#444}
+.details-block{margin-top:15px;border:1px solid var(--line);border-radius:12px;padding:13px 15px;background:#fff}
+details summary{cursor:pointer;font-weight:800}
+.close-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+footer{border-top:1px solid var(--line);padding:28px 0 48px;color:#5a5a5a;font-size:.9rem}
+
+/* runner */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.48);z-index:100;display:none;align-items:flex-start;justify-content:center;padding:18px;overflow:auto}
+.overlay.open{display:flex}
+.runner{width:min(920px,100%);background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 24px 70px rgba(0,0,0,.25);margin:auto}
+.runner-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 18px;border-bottom:1px solid var(--line);background:#fafafa}
+.runner-title-wrap{display:flex;align-items:center;gap:10px;min-width:0}
+.runner-chip{width:12px;height:36px;border-radius:99px;background:#222;flex:0 0 auto}
+.runner-title{font-weight:900;font-size:1.08rem}
+.runner-sub{font-size:.82rem;color:#666}
+.progress{height:7px;background:#ececea}
+.progress>div{height:100%;background:#222;transition:width .2s ease}
+.runner-body{padding:26px;min-height:430px}
+.step{display:none}
+.step.active{display:block;animation:enter .2s ease both}
+@keyframes enter{from{opacity:0;transform:translateX(9px)}to{opacity:1;transform:none}}
+.runner-actions{display:flex;justify-content:space-between;gap:10px;padding:15px 18px;border-top:1px solid var(--line);background:#fafafa;flex-wrap:wrap}
+.choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:15px 0}
+.choice{min-height:54px;border:1px solid #a7a7a7;border-radius:10px;background:#fff;padding:12px;text-align:left;cursor:pointer}
+.choice.selected{border:2px solid #1b1b1b;background:#f3f3f1}
+.prompt{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9rem;white-space:pre-wrap;border:1px solid #bbb;background:#fbfbfa;border-radius:10px;padding:14px;margin:14px 0}
+.callout{border-left:5px solid #222;background:#f8f8f6;padding:13px 15px;margin:14px 0}
+.workmode{border:2px solid #222;border-radius:13px;padding:18px;background:#fff}
+.mini{margin:.5rem 0 0;padding-left:1.2rem}
+.mini li{margin:.35rem 0}
+.img-pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.img-pair img{width:100%;border:1px solid var(--line);border-radius:10px}
+.resource-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.wizard{display:grid;gap:10px}
+.result-card{border:1px solid var(--line);border-radius:12px;padding:15px;background:#fff}
+.support-gate{border:1px solid var(--line);border-radius:14px;padding:18px;background:#fafafa;margin:16px 0}
+.support-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:14px 0}
+.support-options button{min-height:74px}
+.tool-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0}
+.tool-link{border:1px solid #aaa;border-radius:10px;padding:12px;background:#fff;text-decoration:none;font-weight:800;display:block}
+.tool-link small{display:block;font-weight:400;color:#555;margin-top:3px}
+.tutorial-step{border:1px solid var(--line);border-radius:12px;padding:14px;margin:12px 0;background:#fff}
+.tutorial-step strong{display:block;margin-bottom:5px}
+.checklist{border:1px solid var(--line);border-radius:12px;padding:14px;background:#f8f8f6}
+.product-banner{border:2px solid #222;border-radius:12px;padding:14px;background:#fff;margin:12px 0}
+.product-banner strong{display:block;text-transform:uppercase;font-size:.76rem;letter-spacing:.08em;margin-bottom:3px}
+.next-junction{margin-top:18px;border:2px solid #222;border-radius:14px;padding:16px;background:#fff}
+.next-junction h3{margin-bottom:6px}
+.next-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+.next-grid .btn{justify-content:flex-start;text-align:left;white-space:normal}
+.cycle-mini{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin:8px 0 14px;font-size:.82rem;font-weight:800}
+.cycle-mini span{padding:6px 9px;border-radius:999px;border:1px solid var(--line);background:#fff}
+.cycle-mini .active{border:2px solid #222}
+@media(max-width:820px){.next-grid{grid-template-columns:1fr}}
+
+@media(max-width:820px){.support-options,.tool-links{grid-template-columns:1fr}}
+@media(max-width:820px){
+  .intro-grid,.color-guide,.cards,.example-strip,.close-grid,.choice-grid,.img-pair{grid-template-columns:1fr}
+  .cycle{grid-template-columns:1fr}
+  .cycle-arrow{transform:rotate(90deg)}
+  .card{min-height:auto}
+}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}.card,.progress>div,.step{transition:none;animation:none}}
+</style>
+</head>
+<body>
+<div class="topbar"></div>
+
+<header>
+  <div class="wrap">
+    <div class="kicker">Responsive Instruction Workshop</div>
+    <h1>Continuous improvement, supported by the tools we already have</h1>
+    <p class="lead">This is never technology for technology’s sake. It is about using the tools already available to strengthen the fundamentals: clear goals, strong instruction, formative assessment, student feedback, responsive teaching, and opportunities to improve.</p>
+    <div class="meta">
+      <span class="pill"><strong>80 minutes</strong></span>
+      <span class="pill"><strong>Start with the improvement cycle</strong></span>
+      <span class="pill"><strong>Then choose a few places to work</strong></span>
+      <span class="pill"><strong>Leave with something you can use</strong></span>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <div class="wrap">
+    <a href="#why">Why</a>
+    <a href="#cycle">Plan · Do · Study · Act</a>
+    <a href="#continuum">Full continuum</a>
+    <a href="#work">Choose work</a>
+    <a href="#examples">Examples</a>
+    <a href="#close">Close</a>
+  </div>
+</nav>
+
+<main>
+
+<section id="why">
+  <div class="wrap">
+    <div class="kicker">Why this structure?</div>
+    <h2>The fundamentals have not changed</h2>
+    <p class="lead">Good teaching still depends on knowing what we want students to learn, creating strong learning experiences, checking what students are actually learning and experiencing, and responding to the evidence.</p>
+
+    <div class="notice"><strong>Use the cycle as a guide, not a required route.</strong> When you finish a product, the site will suggest a few sensible next moves. You can follow one, return to the continuum, or stop for today.</div>
+
+    <div class="intro-grid">
+      <div class="panel">
+        <h3>Continuous improvement</h3>
+        <p>The workshop uses <strong>Plan → Do → Study → Act</strong> as its organizing framework. The point is not to add a new initiative. It is to make an existing habit of good teaching more visible and easier to act on.</p>
+        <div class="notice"><strong>Core idea:</strong> The technology is not the innovation. The shorter feedback loop is the innovation.</div>
+      </div>
+      <div class="panel soft">
+        <h3>What technology can change</h3>
+        <p>Canvas, AI, Apple tools, Newline boards, and New Quizzes can reduce the time between noticing a need and putting the next useful version in front of students.</p>
+        <p><strong>The tools support the cycle. They do not replace it.</strong></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="cycle">
+  <div class="wrap">
+    <div class="kicker">Continuous improvement</div>
+    <h2>Plan → Do → Study → Act</h2>
+    <p class="lead">The four-part cycle is the framework behind the work. The planning happens inside each pathway, so you do not need a separate PLAN station.</p>
+
+    <div class="color-guide">
+      <div class="color-block" style="background:var(--blue-soft)">
+        <div class="color-name">BLUE | PLAN</div>
+        <p><strong>What do we want students to learn and experience?</strong></p>
+        <p>Clarify learning, culture, capacity, independence, support, engagement, and the evidence that would help us know how things are going.</p>
+      </div>
+
+      <div class="color-block yellow">
+        <div class="color-name">YELLOW | DO / BUILD</div>
+        <p><strong>Build it and put it in front of students.</strong></p>
+        <p>Canvas, paper, AI-assisted production, QTI 2.1, alternate quiz versions, classroom technology, and the actual teaching experience.</p>
+      </div>
+
+      <div class="color-block green">
+        <div class="color-name">GREEN | STUDY / EVIDENCE</div>
+        <p><strong>What are students telling and showing us?</strong></p>
+        <p>Friday Forms, ungraded formative evidence, student work, quiz results, comments, observation, and cultural feedback.</p>
+      </div>
+    </div>
+
+    <div class="color-guide" style="grid-template-columns:1fr;max-width:780px">
+      <div class="color-block red">
+        <div class="color-name">RED | ACT / RESPOND</div>
+        <p><strong>What do we carry into the next version?</strong></p>
+        <p>Keep what is working, re-embed what needs another pass, change a delivery decision, revise a page or packet, create another mastery opportunity, close the loop with students, and begin the next cycle.</p>
+      </div>
+    </div>
+
+    <div class="notice"><strong>Culture and performance both matter.</strong> We can use formative evidence to stay accountable to high standards for learning while also checking whether students are experiencing the classroom culture and support we intended.</div>
+  </div>
+</section>
+
+
+<section id="continuum">
+  <div class="wrap">
+    <div class="kicker">The framework</div>
+    <h2>Plan → Do → Study → Act → repeat</h2>
+    <p class="lead">You will see this cycle throughout the workshop. <strong>PLAN is built into every pathway:</strong> what are you trying to do, what do you already have, and what evidence will matter? Then you build, study what happens, respond, and collect new evidence.</p>
+
+    <div class="continuum" style="grid-template-columns:repeat(4,1fr)">
+      <div class="b">
+        <h3>PLAN</h3>
+        <p>Clarify what you want students to learn or experience and what would help you know how it is going.</p>
+      </div>
+      <div class="y">
+        <h3>DO / BUILD</h3>
+        <p>Create or organize the material students will actually use.</p>
+      </div>
+      <div class="g">
+        <h3>STUDY / EVIDENCE</h3>
+        <p>Collect learning evidence and student experience feedback.</p>
+      </div>
+      <div class="r">
+        <h3>ACT / RESPOND</h3>
+        <p>Keep, tailor, re-embed, revise, reassess, or ask another question.</p>
+      </div>
+    </div>
+
+    <div class="notice"><strong>The cycle is continuous.</strong> Collect evidence → tailor what students experience → try it → check whether it worked → collect new evidence → repeat.</div>
+
+    <div class="intro-grid">
+      <div class="panel">
+        <h3>Culture + performance</h3>
+        <p>Friday Forms and other checks can combine student experience evidence with ungraded formative learning evidence. Both help us stay accountable to the classroom culture and learning standards we intended.</p>
+      </div>
+      <div class="panel">
+        <h3>Technology supports the fundamentals</h3>
+        <p>Canvas, AI, classroom tools, and New Quizzes can make it faster to build, respond, and put the next useful version in front of students. The tools do not replace the cycle.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section id="work">
+  <div class="wrap">
+    <div class="work-head">
+      <div>
+        <div class="kicker">Work session</div>
+        <h2>What do you want to accomplish today?</h2>
+      </div>
+      <div class="choice-note"><strong>Choose a few competencies.</strong> Each path can be fast or fully guided. The planning questions are built into the pathway. Skip mechanics you already know and open tutorials when you want them.</div>
+    </div>
+    <div class="notice"><strong>Choose something you already want to accomplish.</strong> Use as much or as little support as you need. Nothing here assumes your current approach needs to change.</div>
+    <div class="notice"><strong>Different teachers need different things.</strong> Every competency asks what you already know before it teaches the mechanics. Choose <em>Take me to the build</em> when you are ready to work, or <em>Show me how</em> when you want screenshots, click-by-click directions, prompting help, or examples.</div>
+
+    <div class="group">
+      <div class="group-title"><span class="dot" style="background:var(--green)"></span><h3>GREEN | STUDY / EVIDENCE</h3></div>
+      <div class="cards">
+        <article class="card green">
+          <span class="tag">Green</span><h3>Build a Student Feedback Loop</h3>
+          <p>Start with what you want to know about your students' experience and learning. Build questions in a format you already know.</p><div class="outcome"><strong>Leave with</strong>A short feedback form or ready-to-use question set.</div>
+          <div class="actions"><button class="btn" data-path="feedback">Use this path</button></div>
+        </article>
+        <article class="card green2">
+          <span class="tag">Green</span><h3>Look at Student Evidence</h3>
+          <p>Use responses, ungraded formative results, student work, or observations to decide what you want to know more about.</p><div class="outcome"><strong>Leave with</strong>One question worth exploring and one next move.</div>
+          <div class="actions"><button class="btn" data-path="evidence">Use this path</button></div>
+        </article>
+        <article class="card green">
+          <span class="tag">Green</span><h3>Close the Loop</h3>
+          <p>Tell students what you heard, what you decided to try, and when you will ask again.</p><div class="outcome"><strong>Leave with</strong>A message or routine you can actually use with students.</div>
+          <div class="actions"><button class="btn" data-path="closeLoop">Use this path</button></div>
+        </article>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-title"><span class="dot" style="background:var(--yellow)"></span><h3>YELLOW | DO / BUILD</h3></div>
+      <div class="cards">
+        <article class="card yellow">
+          <span class="tag">Yellow</span><h3>Speed-Run Getting Materials into Canvas</h3>
+          <p>Get existing lesson content into Canvas Pages/Modules, or get an existing quiz into Canvas New Quizzes.</p><div class="outcome"><strong>Leave with</strong>One real lesson/resource set in Canvas or one working Canvas quiz.</div>
+          <div class="actions"><button class="btn" data-path="speedrun">Use this path</button></div>
+        </article>
+        <article class="card yellow">
+          <span class="tag">Yellow</span><h3>Canvas + Paper</h3>
+          <p>Decide what you want students to access digitally and what is worth keeping on paper.</p><div class="outcome"><strong>Leave with</strong>A plan or paired digital/paper resource for one lesson.</div>
+          <div class="actions"><button class="btn" data-path="canvasPaper">Use this path</button></div>
+        </article>
+        <article class="card yellow2">
+          <span class="tag">Yellow</span><h3>Build a Student-Facing Canvas Page</h3>
+          <p>Use your own content. Let Chat help with the backside HTML and page structure without replacing your material.</p><div class="outcome"><strong>Leave with</strong>Canvas-ready HTML built from your own content.</div>
+          <div class="actions"><button class="btn" data-path="canvasHtml">Use this path</button></div>
+        </article>
+        <article class="card yellow">
+          <span class="tag">Yellow</span><h3>Learn the AI Workflow</h3>
+          <p>Choose your own starting point: open a district-provided AI tool, learn a practical prompting structure, or skip directly to refining a real product.</p>
+          <div class="outcome"><strong>Leave with</strong>A reusable prompting workflow and one refined piece of real work.</div>
+          <div class="actions"><button class="btn" data-path="aiWorkflow">Use this path</button></div>
+        </article>
+        <article class="card yellow2">
+          <span class="tag">Yellow</span><h3>Rework Something You Already Have</h3>
+          <p>Change the format, not the ownership. Turn existing slides, readings, notes, or activities into another useful form.</p><div class="outcome"><strong>Leave with</strong>One existing resource in a more useful format.</div>
+          <div class="actions"><button class="btn" data-path="rework">Use this path</button></div>
+        </article>
+        <article class="card yellow2">
+          <span class="tag">Yellow</span><h3>Use Feedback to Shape the Next Version</h3>
+          <p>Carry a need forward into the next lesson, packet, case, teacher stop, or retrieval opportunity instead of starting over.</p><div class="outcome"><strong>Leave with</strong>One revised or re-embedded student-facing element.</div>
+          <div class="actions"><button class="btn" data-path="version2">Use this path</button></div>
+        </article>
+        <article class="card yellow">
+          <span class="tag">Yellow</span><h3>Get an Existing Quiz into New Quizzes</h3>
+          <p>Use questions you already have to create an import-ready QTI 2.1 package for Canvas New Quizzes, including additional versions when another mastery opportunity is useful.</p><div class="outcome"><strong>Leave with</strong>An import-ready QTI 2.1 workflow for a quiz you already have, with a practical path to additional mastery versions.</div>
+          <div class="actions"><button class="btn" data-path="qti">Use this path</button></div>
+        </article>
+        <article class="card yellow2">
+          <span class="tag">Yellow</span><h3>Give AI More Course Context</h3>
+          <p>Use a Canvas export or larger set of course materials so Chat can work with sequence, terminology, and prior learning.</p><div class="outcome"><strong>Leave with</strong>One useful course-level prompt/workflow using your own materials.</div>
+          <div class="actions"><button class="btn" data-path="courseContext">Use this path</button></div>
+        </article>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-title"><span class="dot" style="background:var(--red)"></span><h3>RED | ACT / RESPOND / RESPOND</h3></div>
+      <div class="cards">
+        <article class="card red">
+          <span class="tag">Red</span><h3>Use Materials Flexibly in the Room</h3>
+          <p>Plan how you want to use the material across whole-class, pod, small-group, individual, or mobile instruction.</p><div class="outcome"><strong>Leave with</strong>A plan for how one upcoming lesson will work in your room.</div>
+          <div class="actions"><button class="btn" data-path="flexUse">Use this path</button></div>
+        </article>
+        <article class="card red2">
+          <span class="tag">Red</span><h3>Design for How You Actually Teach</h3>
+          <p>Look at how page format, paper materials, teacher stops, displays, and available devices support the way you want to teach.</p><div class="outcome"><strong>Leave with</strong>One format decision that better supports your classroom use.</div>
+          <div class="actions"><button class="btn" data-path="designUse">Use this path</button></div>
+        </article>
+        <article class="card red">
+          <span class="tag">Red</span><h3>Try the Next Version</h3>
+          <p>Plan what students will experience, what you will watch for, and how you will know what to carry forward next.</p><div class="outcome"><strong>Leave with</strong>An implementation point and a next feedback check.</div>
+          <div class="actions"><button class="btn" data-path="tryVersion">Use this path</button></div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="examples">
+  <div class="wrap">
+    <div class="kicker">Examples, not prescriptions</div>
+    <h2>See one classroom cycle</h2>
+    <p class="lead">These examples are here to make the process visible. They are not a template teachers are expected to copy.</p>
+    <div class="example-strip">
+      <div class="example">
+        <img src="assets/green-03.png" alt="Example student comments from a Friday Form">
+        <div class="cap"><strong>Ask students.</strong> Experience feedback can be mixed. That is useful information, not a vote.</div>
+      </div>
+      <div class="example">
+        <img src="assets/green-10.png" alt="Example ungraded formative result">
+        <div class="cap"><strong>Look at evidence.</strong> Formative results can show what should stay active in future learning.</div>
+      </div>
+      <div class="example">
+        <img src="assets/yellow-canvas-new.png" alt="Current student-facing Canvas page">
+        <div class="cap"><strong>Build the next version.</strong> Materials can evolve as students and teachers use them.</div>
+      </div>
+    </div>
+
+    <details class="details-block">
+      <summary>See the Canvas HTML workflow</summary>
+      <div class="img-pair">
+        <img src="assets/yellow-html-button.png" alt="Canvas editor showing HTML mode control">
+        <img src="assets/yellow-html-editor.png" alt="Canvas HTML editor">
+      </div>
+      <p>Bring your own content. Ask Chat to format the backside HTML. Switch Canvas into HTML mode, paste, save, review, and revise.</p>
+    </details>
+
+    <details class="details-block">
+      <summary>Open the Canvas + paper example</summary>
+      <p>The Psychology inquiry guide is one example of dividing the work across two surfaces. Canvas carries sequence and resources. The paper guide carries stops, notes, evidence, and reasoning.</p>
+      <a class="btn secondary" href="assets/Psychology_1.2_Pod_Inquiry_Guide_FINAL.docx">Open the packet</a>
+    </details>
+
+    <details class="details-block">
+      <summary>Compare an earlier and current Canvas page</summary>
+      <div class="img-pair">
+        <img src="assets/yellow-canvas-old.png" alt="Earlier Canvas page">
+        <img src="assets/yellow-canvas-new.png" alt="Current Canvas page">
+      </div>
+      <p>Getting material into Canvas can be useful on its own. Later versions may change as the course, materials, and classroom use change.</p>
+    </details>
+  </div>
+</section>
+
+<section id="close">
+  <div class="wrap">
+    <div class="kicker">Close</div>
+    <h2>What do you have now, and what happens next?</h2>
+    <div class="close-grid">
+      <div class="panel">
+        <h3>Share</h3>
+        <ul class="mini">
+          <li>What did you work on?</li>
+          <li>What did you build, organize, revise, or plan?</li>
+          <li>What will students experience?</li>
+          <li>How will you know how it went?</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>Workshop Friday Form</h3>
+        <ul class="mini">
+          <li>What helped today?</li>
+          <li>What should change next time?</li>
+          <li>What are you going to try?</li>
+        </ul>
+      </div>
+    </div>
+    <div class="notice"><strong>The workshop uses the same cycle:</strong> ask, look, adjust, try, ask again.</div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">Responsive Instruction Workshop | Continuous improvement supported by Canvas, AI, classroom tools, student feedback, and formative evidence.</div>
+</footer>
+
+<div class="overlay" id="overlay" aria-hidden="true">
+  <div class="runner" role="dialog" aria-modal="true" aria-labelledby="runnerTitle">
+    <div class="runner-head">
+      <div class="runner-title-wrap">
+        <div class="runner-chip" id="runnerChip"></div>
+        <div><div class="runner-title" id="runnerTitle">Work Path</div><div class="runner-sub" id="runnerSub"></div></div>
+      </div>
+      <button class="btn secondary" id="closeRunner" type="button">Close</button>
+    </div>
+    <div class="progress"><div id="progressBar"></div></div>
+    <div class="runner-body" id="runnerBody"></div>
+    <div class="runner-actions">
+      <button class="btn secondary" id="backBtn" type="button">Back</button>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn ghost" id="toolboxBtn" type="button">Return to continuum</button>
+        <button class="btn" id="nextBtn" type="button">Next</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const colors={blue:"#5f8fc9",green:"#4f9b63",yellow:"#d4aa21",red:"#c95f55",neutral:"#222"};
+
+const paths={
+
+
+ chooser:{title:"What would be useful right now?",color:"neutral",sub:"No score. Just a recommendation.",steps:[
+  `<h2>What sounds closest to what you want today?</h2>
+   <div class="choice-grid">
+    <button class="choice" data-recommend="feedback">I want to hear from students more intentionally.</button>
+    <button class="choice" data-recommend="speedrun">I want to get materials into Canvas more efficiently.</button>
+    <button class="choice" data-recommend="aiWorkflow">I want to get more comfortable using AI.</button><button class="choice" data-recommend="rework">I want AI to help me reformat something I already use.</button>
+    <button class="choice" data-recommend="version2">I have student evidence and want to decide what comes next.</button>
+    <button class="choice" data-recommend="flexUse">I want to think about how materials get used in the room.</button>
+    <button class="choice" data-recommend="courseContext">I want AI to work with more of my course context.</button>
+   </div>
+   <div id="chooserResult" class="result-card" style="display:none"></div>`,
+  `<h2>Use the recommendation as a starting point</h2><p>You can switch paths at any time. Pick the content area card that matches the recommended path and start there.</p>`
+ ]},
+
+ feedback:{title:"Build a Student Feedback Loop",color:"green",sub:"GREEN | STUDY / EVIDENCE",steps:[
+  `<div class="product-banner"><strong>You are making</strong>A short, recurring student feedback + formative check.</div>
+   <h2>Where do you want help?</h2><div class="support-options">
+    <button class="choice" data-jump="1">I know how to build forms. Help me with the questions.</button>
+    <button class="choice" data-jump="2">Help me choose culture + learning questions.</button>
+    <button class="choice" data-jump="4">Show me the full process.</button>
+   </div>`,
+  `<h2>Build the question set</h2><p>A practical model is roughly half experience/culture and half ungraded formative learning evidence.</p>
+   <div class="prompt">CULTURE / EXPERIENCE
+1. ...
+2. ...
+
+UN-GRADED LEARNING EVIDENCE
+3. ...
+4. ...
+
+OPEN RESPONSE
+5. Is there anything that would help me understand your experience or learning this week?</div>
+   <div class="workmode"><h2>WORK MODE</h2><p>Write the actual questions now, then build them in the form tool you already use.</p></div><div class="next-junction"><div class="cycle-mini"><span>PLAN</span><span>DO</span><span class="active">STUDY</span><span>ACT</span></div>
+<h3>Once students respond...</h3><p>You can come back here later. The next useful move is usually to look at the evidence before deciding what to change.</p>
+<div class="next-grid">
+<button class="btn" data-openpath="evidence">I have responses. Help me study them.</button>
+<button class="btn secondary" data-openpath="closeLoop">I already know what I want to tell students.</button>
+
+</div></div>`,
+  `<h2>Choose what you genuinely want to know</h2>
+   <div class="choice-grid"><button class="choice">Clarity</button><button class="choice">Engagement</button><button class="choice">Connection</button><button class="choice">Support</button><button class="choice">Independence</button><button class="choice">Voice / agency</button><button class="choice">What is sticking?</button><button class="choice">What is being confused?</button><button class="choice">Can they apply it?</button></div>
+   <button class="btn" data-jump="1">Turn these into my form</button>`,
+  `<h2>Optional example</h2><div class="img-pair"><img src="assets/green-01.png" alt="Experience question example"><img src="assets/green-10.png" alt="Formative question example"></div><button class="btn" data-jump="1">Build mine</button>`,
+  `<h2>Full walkthrough</h2>
+   <div class="tutorial-step"><strong>1. Pick a familiar platform.</strong> Google Forms, Canvas, Microsoft Forms, paper, or another tool you already know.</div>
+   <div class="tutorial-step"><strong>2. Choose culture/capacity evidence.</strong> Ask only about experiences that would influence your teaching decisions.</div>
+   <div class="tutorial-step"><strong>3. Choose ungraded formative evidence.</strong> Sample the learning students should still carry forward.</div>
+   <div class="tutorial-step"><strong>4. Build a short form.</strong> Keep it short enough that students will complete it consistently and you will actually read it.</div>
+   <div class="tutorial-step"><strong>5. Decide when you will look.</strong> Evidence only becomes useful if it enters the next decision.</div>
+   <button class="btn" data-jump="1">Build my question set</button>`
+ ]},
+
+ evidence:{title:"Look at Student Evidence",color:"green",sub:"GREEN | STUDY / EVIDENCE",steps:[
+  `<div class="product-banner"><strong>You are making</strong>A short evidence summary with one question and one next move.</div>
+   <h2>How much help do you want interpreting evidence?</h2><div class="support-options">
+    <button class="choice" data-jump="1">Take me to the analysis template.</button>
+    <button class="choice" data-jump="2">Walk me through what to look for.</button>
+    <button class="choice" data-jump="3">Show me a real example first.</button>
+   </div>`,
+  `<div class="workmode"><h2>WORK MODE</h2><div class="prompt">WHAT I NOTICE:
+WHAT LOOKS SECURE:
+WHERE RESULTS / COMMENTS ARE MIXED:
+WHAT I WANT TO KNOW MORE ABOUT:
+ONE NEXT MOVE I AM CONSIDERING:</div><p>Do not begin with "What do I have to change?" Begin with what the evidence actually supports.</p></div><div class="next-junction"><div class="cycle-mini"><span>PLAN</span><span>DO</span><span class="active">STUDY</span><span>ACT</span></div>
+<h3>What do the results suggest you do next?</h3>
+<div class="next-grid">
+<button class="btn" data-openpath="version2">Tailor or re-embed something for the next version</button>
+<button class="btn" data-openpath="qti">Create another mastery / assessment opportunity</button>
+<button class="btn secondary" data-openpath="feedback">I need more evidence before changing anything</button>
+<button class="btn secondary" data-openpath="closeLoop">Close the loop with students</button>
+</div></div>`,
+  `<h2>Look before acting</h2><div class="tutorial-step"><strong>Separate evidence types.</strong> Learning evidence, student experience, and one-off comments do not mean the same thing.</div><div class="tutorial-step"><strong>Look for patterns.</strong> Is this consistent, mixed, or isolated?</div><div class="tutorial-step"><strong>Protect what is working.</strong> Continuous improvement includes keeping effective choices.</div><div class="tutorial-step"><strong>Choose the smallest useful next move.</strong> Sometimes that is another question, not a change.</div><button class="btn" data-jump="1">Analyze my evidence</button>`,
+  `<h2>Example</h2><div class="img-pair"><img src="assets/green-03.png" alt="Mixed student comments"><img src="assets/green-10.png" alt="Formative result"></div><p>Mixed culture feedback and a weaker formative concept can lead to different next moves. Neither automatically dictates a redesign.</p><button class="btn" data-jump="1">Analyze mine</button>`
+ ]},
+
+ closeLoop:{title:"Close the Loop with Students",color:"red",sub:"RED | ACT / RESPOND",steps:[
+  `<div class="product-banner"><strong>You are making</strong>A brief student-facing message that shows feedback was heard and considered.</div>
+   <h2>How much support?</h2><div class="support-options"><button class="choice" data-jump="1">Give me the template.</button><button class="choice" data-jump="2">Walk me through what belongs in it.</button></div>`,
+  `<div class="workmode"><h2>WORK MODE</h2><div class="prompt">You told me...
+I noticed...
+So we are going to...
+I will ask again...</div><p>Use your own voice. You are showing students that feedback entered the decision, not promising that every preference becomes a change.</p></div><div class="next-junction"><div class="cycle-mini"><span>PLAN</span><span>DO</span><span>STUDY</span><span class="active">ACT</span></div>
+<h3>Ready for the next cycle?</h3>
+<div class="next-grid">
+<button class="btn" data-openpath="feedback">Collect new feedback / evidence</button>
+
+<button class="btn secondary" data-openpath="tryVersion">Try the next version first</button>
+</div></div>`,
+  `<h2>What belongs in the message?</h2><div class="tutorial-step"><strong>What you heard.</strong> Identify the pattern, not every comment.</div><div class="tutorial-step"><strong>What you decided.</strong> This may be a change, a decision to keep something, or another question.</div><div class="tutorial-step"><strong>What students will experience.</strong> Make the effect visible.</div><div class="tutorial-step"><strong>When you will check again.</strong> Keep the cycle alive.</div><button class="btn" data-jump="1">Draft mine</button>`
+ ]},
+
+ speedrun:{title:"Speed-Run Canvas",color:"yellow",sub:"YELLOW | DO / BUILD",steps:[
+  `<div class="product-banner"><strong>You are making</strong>Either a real lesson/resource set in Canvas or a working Canvas New Quiz.</div>
+   <h2>What are you trying to get into Canvas?</h2>
+   <div class="support-options">
+    <button class="choice" data-jump="1"><strong>Lesson content / resources</strong><br>Pages, Modules, files, links, directions.</button>
+    <button class="choice" data-openpath="qti"><strong>Quiz / assessment</strong><br>Use the QTI 2.1 New Quizzes workflow.</button>
+   </div>`,
+  `<h2>Do you already know how to create Pages and Modules?</h2>
+   <div class="support-options">
+    <button class="choice" data-jump="3"><strong>Yes</strong><br>Take me to the build.</button>
+    <button class="choice" data-jump="2"><strong>No / refresher</strong><br>Show me the Canvas steps.</button>
+    <button class="choice" data-jump="4"><strong>I want AI help first</strong><br>Help me prepare the content for Canvas.</button>
+   </div>`,
+  `<h2>Canvas Pages / Modules tutorial</h2>
+   <div class="tutorial-step"><strong>1. Open the course and go to Modules.</strong> Use the module as the place students find the sequence of work.</div>
+   <div class="tutorial-step"><strong>2. Add an existing item or create a new Page.</strong> Use a Page when you want students to see the lesson content directly in Canvas.</div>
+   <div class="tutorial-step"><strong>3. Add files or links where students need them.</strong> You do not need to rebuild a document just because it is in Canvas.</div>
+   <div class="tutorial-step"><strong>4. Put items in the order students should use them.</strong></div>
+   <div class="tutorial-step"><strong>5. Publish and check the student view.</strong></div>
+   <button class="btn" data-jump="3">Got it. Take me to Work Mode.</button>`,
+  `<div class="workmode"><h2>Split your screen and let’s go.</h2>
+   <p><strong>Keep this guide open on one side. Open Canvas and your existing lesson/materials on the other.</strong></p>
+   <ol>
+    <li>Open the course and the Module where this belongs.</li>
+    <li>Create or open the Page students will use.</li>
+    <li>Add the existing content, files, links, or directions.</li>
+    <li>Put the items in the order students need them.</li>
+    <li>Publish and check what students will see.</li>
+   </ol>
+   <div class="checklist"><strong>Finished when:</strong> a student can find the lesson, open what they need, and know what to do next.</div>
+   </div>
+   <div class="next-junction"><div class="cycle-mini"><span>PLAN</span><span class="active">DO</span><span>STUDY</span><span>ACT</span></div>
+   <h3>What next?</h3><div class="next-grid">
+   <button class="btn" data-openpath="canvasHtml">Refine the student-facing page with HTML / AI</button>
+   <button class="btn" data-openpath="canvasPaper">Pair it with a paper resource</button>
+   <button class="btn secondary" data-openpath="feedback">Plan how you will check learning / experience</button>
+   <button class="btn secondary" data-openpath="flexUse">Plan how students will use it in class</button>
+   </div></div>`,
+  `<h2>Want AI to help prepare the content?</h2>
+   <div class="qti-shot"><img src="assets/tigerid-ai-tools.png" alt="TigerID portal with Gemini and MagicSchool highlighted"><p>Gemini and MagicSchool are available through TigerID. You can also use an AI tool you already prefer.</p></div>
+   <div class="tool-links">
+<a class="tool-link" href="https://gemini.google.com/" target="_blank" rel="noopener">Gemini<small>Available through TigerID.</small></a>
+<a class="tool-link" href="https://www.magicschool.ai/" target="_blank" rel="noopener">MagicSchool<small>Available through TigerID.</small></a>
+<a class="tool-link" href="https://chatgpt.com/" target="_blank" rel="noopener">ChatGPT<small>Use if you already have access or prefer it.</small></a>
+<a class="tool-link" href="https://claude.ai/" target="_blank" rel="noopener">Claude<small>Use if you already have access or prefer it.</small></a>
+</div>
+   <div class="prompt">I already have the following lesson material. Preserve my instructional content, terminology, examples, links, and learning goals. Do not invent new content.
+
+Help me organize it for a student-facing Canvas Page. I want students to be able to [read / follow a sequence / access resources / work independently / move between Canvas and paper].
+
+Return Canvas-ready content that I can paste into a Page. Keep the structure clear and practical.</div>
+   <button class="btn" data-jump="3">I have the content. Take me to Canvas.</button>`
+ ]},
+ canvasPaper:{title:"Canvas + Paper",color:"yellow",sub:"YELLOW | DO / BUILD",steps:[
+  `<div class="product-banner"><strong>You are making</strong>A paired digital + paper plan or resource for one real lesson.</div>
+   <h2>What support do you want?</h2><div class="support-options"><button class="choice" data-jump="1">I already use both. Take me to the design decision.</button><button class="choice" data-jump="2">Show me how to decide what belongs where.</button><button class="choice" data-jump="3">Show me the Psychology example.</button></div>`,
+  `<div class="workmode"><h2>WORK MODE</h2><div class="prompt">CANVAS WILL CARRY:
+PAPER WILL CARRY:
+BOTH NEED:
+STUDENTS WILL MOVE BETWEEN THEM BY:</div><p>Use one upcoming lesson, not an imaginary example.</p></div><div class="next-junction"><div class="cycle-mini"><span>PLAN</span><span class="active">DO</span><span>STUDY</span><span>ACT</span></div>
+<h3>Ready to try the pair?</h3>
+<div class="next-grid">
+<button class="btn" data-openpath="flexUse">Plan how students will use both in class</button>
+<button class="btn" data-openpath="feedback">Choose how you will check the experience + learning</button>
+<button class="btn secondary" data-openpath="rework">Use AI to build/refine the companion piece</button>
+</div></div>`,
+  `<h2>What tends to fit where?</h2><div class="tutorial-step"><strong>Canvas:</strong> sequence, video, interactives, links, examples, cases, resources.</div><div class="tutorial-step"><strong>Paper:</strong> annotation, diagrams, evidence, notes, reasoning, a permanent study record.</div><div class="callout">Avoid making students do the same work twice without a purpose.</div><button class="btn" data-jump="1">Plan mine</button>`,
+  `<h2>Example</h2><p>The Psychology inquiry guide explicitly tells students to move through the Canvas page and paper guide together. The numbered stops keep the two surfaces aligned.</p><a class="btn secondary" href="assets/Psychology_1.2_Pod_Inquiry_Guide_FINAL.docx">Open the packet example</a><p style="margin-top:12px"><button class="btn" data-jump="1">Plan mine</button></p>`
+ ]},
+
+ canvasHtml:{title:"Build or Refine a Student-Facing Canvas Page",color:"yellow",sub:"YELLOW | DO / BUILD",steps:[
+  `<div class="product-banner"><strong>You are making</strong>A student-facing Canvas page built from your own content and refined through AI.</div>
+   <h2>Do you already know how to put HTML into a Canvas page?</h2>
+   <div class="support-options">
+    <button class="choice" data-jump="3"><strong>Yes</strong><br>Skip Canvas mechanics. Take me to AI + refinement.</button>
+    <button class="choice" data-jump="1"><strong>No</strong><br>Show me exactly where the HTML goes.</button>
+    <button class="choice" data-jump="2"><strong>I have done it before</strong><br>Give me the quick refresher.</button>
+   </div>`,
+  `<h2>Canvas HTML tutorial</h2>
+   <div class="tutorial-step"><strong>1. Open the Canvas page you want to edit.</strong> Choose Edit.</div>
+   <div class="tutorial-step"><strong>2. Switch from the visual editor to HTML/source mode.</strong></div>
+   <div class="img-pair"><img src="assets/yellow-html-button.png" alt="Canvas Rich Content Editor showing the HTML source button"><img src="assets/yellow-html-editor.png" alt="Canvas HTML editor showing source code"></div>
+   <div class="tutorial-step"><strong>3. Paste the HTML from your AI tool.</strong></div>
+   <div class="tutorial-step"><strong>4. Save the page, review it as a student, and return to Edit if something needs revision.</strong></div>
+   <button class="btn" data-jump="3">Got it. Take me to the AI workflow.</button>`,
+  `<h2>Quick refresher</h2><p><strong>Edit page → HTML/source button → paste code → Save → review.</strong></p><div class="img-pair"><img src="assets/yellow-html-button.png" alt="HTML source button"><img src="assets/yellow-html-editor.png" alt="HTML editor"></div><button class="btn" data-jump="3">Take me to AI + refinement</button>`,
+  `<h2>What are you starting with?</h2><div class="choice-grid"><button class="choice">Existing Canvas page</button><button class="choice">Word / Google Doc</button><button class="choice">PDF</button><button class="choice">Slides</button><button class="choice">Paper packet</button><button class="choice">Pasted text / notes</button></div>
+   <h3>How much AI support?</h3><div class="support-options"><button class="choice" data-jump="5">I know how to prompt. Just give me tool links.</button><button class="choice" data-jump="4">Give me a strong starter prompt.</button><button class="choice" data-jump="6">Teach me how to refine the prompt.</button></div>`,
+  `<h2>Starter prompt</h2>
+   <div class="prompt">Use the instructional content I provide. Do not generate new instructional content. Preserve my terminology, examples, sequence, links, and learning goals. Create Canvas-compatible HTML.
+
+Students should experience the page as: [clear sequence / packet-aligned / easy to teach from / independent / teacher-stopped / other].
+
+Do not change: [what must stay intact].</div>
+   <button class="btn" data-jump="5">Open an AI tool and build</button>`,
+  `<h2>Open the AI tool you prefer</h2>
+   <div class="qti-shot"><img src="assets/tigerid-ai-tools.png" alt="TigerID portal with Gemini and MagicSchool highlighted"><p>Gemini and MagicSchool are available through TigerID. ChatGPT and Claude are alternatives for teachers who already use them.</p></div>
+   <div class="tool-links">
+<a class="tool-link" href="https://gemini.google.com/" target="_blank" rel="noopener">Gemini<small>Available to staff through TigerID in the district portal.</small></a>
+<a class="tool-link" href="https://www.magicschool.ai/" target="_blank" rel="noopener">MagicSchool<small>Available to staff through TigerID in the district portal.</small></a>
+<a class="tool-link" href="https://chatgpt.com/" target="_blank" rel="noopener">ChatGPT<small>Use if you already have access or prefer it.</small></a>
+<a class="tool-link" href="https://claude.ai/" target="_blank" rel="noopener">Claude<small>Use if you already have access or prefer it.</small></a>
+</div>
+   <div class="workmode"><h2>WORK MODE</h2><ol><li>Give the AI your real content.</li><li>Give it the preservation constraints.</li><li>Ask for Canvas-compatible HTML.</li><li>Paste the HTML into Canvas.</li><li>Save and review the actual page.</li></ol></div>
+   <button class="btn" data-jump="7">I have a first version. Help me refine it.</button>`,
+  `<h2>How prompting works here</h2>
+   <div class="tutorial-step"><strong>CONTEXT</strong>What is this material and who will use it?</div>
+   <div class="tutorial-step"><strong>TASK</strong>What should AI make or change?</div>
+   <div class="tutorial-step"><strong>CONSTRAINTS</strong>What content, terms, sequence, links, or examples must remain intact?</div>
+   <div class="tutorial-step"><strong>STUDENT EXPERIENCE</strong>What should be easier or clearer for students?</div>
+   <div class="tutorial-step"><strong>OUTPUT</strong>Ask specifically for Canvas-compatible HTML.</div>
+   <button class="btn" data-jump="4">Build my first prompt</button>`,
+  `<h2>Refine instead of starting over</h2><p>Review the actual page. Then tell the AI exactly what should change while protecting everything else.</p>
+   <div class="prompt">Keep all instructional content and links unchanged. Revise only the following:
+- [make the sections more visible]
+- [match the section numbers to my packet]
+- [add clear STOP / DO / RECORD labels]
+- [reduce unnecessary scrolling]
+- [keep content open so I can teach from the page]
+
+Preserve everything else.</div>
+   <div class="checklist"><strong>Finished when:</strong> the page preserves your content, works in Canvas, and supports how students will actually use it.</div><div class="next-junction"><div class="cycle-mini"><span>PLAN</span><span class="active">DO</span><span>STUDY</span><span>ACT</span></div>
+<h3>Where do you want to go next?</h3>
+<div class="next-grid">
+<button class="btn" data-openpath="designUse">Plan how you will actually teach from this page</button>
+<button class="btn" data-openpath="feedback">Plan how you will check whether it worked</button>
+<button class="btn secondary" data-openpath="canvasPaper">Build a paper companion</button>
+<button class="btn secondary" data-openpath="version2">I already have feedback. Revise the next version.</button>
+</div></div>`
+ ]},
+
+ aiWorkflow:{title:"Learn the AI Workflow",color:"yellow",sub:"YELLOW | DO / BUILD",steps:[
+  `<div class="product-banner"><strong>You are making</strong>A reusable prompting workflow and one improved version of real teacher-created material.</div>
+   <h2>Where do you want to enter?</h2><div class="support-options">
+    <button class="choice" data-jump="2">I already know how to use AI. Take me to refinement.</button>
+    <button class="choice" data-jump="1">Teach me a practical prompting structure.</button>
+    <button class="choice" data-jump="3">Show me where I can access AI.</button>
+   </div>`,
+  `<h2>A practical prompt has five parts</h2>
+   <div class="tutorial-step"><strong>1. CONTEXT</strong>What are you working on? Who are the students? What have they already done?</div>
+   <div class="tutorial-step"><strong>2. TASK</strong>What exactly do you want AI to make, change, compare, or analyze?</div>
+   <div class="tutorial-step"><strong>3. CONSTRAINTS</strong>What must remain unchanged? What should AI not invent?</div>
+   <div class="tutorial-step"><strong>4. STUDENT EXPERIENCE</strong>What should be clearer, easier, more accessible, or more useful?</div>
+   <div class="tutorial-step"><strong>5. OUTPUT</strong>What format do you need: Canvas HTML, packet, table, question set, QTI 2.1, etc.?</div>
+   <button class="btn" data-jump="2">Use this on my own work</button>`,
+  `<h2>Refinement is part of the workflow</h2><div class="prompt">Here is Version 1. Preserve [content / terminology / links / learning target]. Revise only [specific feature]. Students should experience [desired change]. Return [needed format].</div>
+   <div class="workmode"><h2>WORK MODE</h2><p>Use one real item. Create a first version, inspect it, then give one specific refinement instruction instead of restarting.</p></div>`,
+  `<h2>AI tools available to you</h2><div class="qti-shot"><img src="assets/tigerid-ai-tools.png" alt="TigerID portal with Gemini and MagicSchool highlighted"><p>Gemini and MagicSchool are available through TigerID.</p></div><div class="tool-links">
+<a class="tool-link" href="https://gemini.google.com/" target="_blank" rel="noopener">Gemini<small>Available to staff through TigerID in the district portal.</small></a>
+<a class="tool-link" href="https://www.magicschool.ai/" target="_blank" rel="noopener">MagicSchool<small>Available to staff through TigerID in the district portal.</small></a>
+<a class="tool-link" href="https://chatgpt.com/" target="_blank" rel="noopener">ChatGPT<small>Use if you already have access or prefer it.</small></a>
+<a class="tool-link" href="https://claude.ai/" target="_blank" rel="noopener">Claude<small>Use if you already have access or prefer it.</small></a>
+</div><button class="btn" data-jump="1">Teach me how to prompt</button>`
+ ]},
+ rework:{title:"Rework Something You Already Have",color:"yellow",sub:"YELLOW | DO / BUILD",steps:[
+  `<div class="product-banner"><strong>You are making</strong>One existing resource in a more useful format.</div>
+   <h2>How much AI support?</h2><div class="support-options"><button class="choice" data-jump="2">I know how to prompt. Take me to tools + build.</button><button class="choice" data-jump="1">Teach me a reliable reformatting prompt.</button></div>`,
+  `<h2>Use a preserve-first prompt</h2><div class="prompt">I want to reformat an existing resource. Preserve the instructional content, terminology, examples, and intent. Do not add new content unless I explicitly ask. Help me turn this into [target format] for [how students will use it].</div><button class="btn" data-jump="2">Open a tool and build</button>`,
+  `<h2>Choose a tool and make the real product</h2><div class="tool-links">
+<a class="tool-link" href="https://gemini.google.com/" target="_blank" rel="noopener">Gemini<small>Available to staff through TigerID in the district portal.</small></a>
+<a class="tool-link" href="https://www.magicschool.ai/" target="_blank" rel="noopener">MagicSchool<small>Available to staff through TigerID in the district portal.</small></a>
+<a class="tool-link" href="https://chatgpt.com/" target="_blank" rel="noopener">ChatGPT<small>Use if you already have access or prefer it.</small></a>
+<a class="tool-link" href="https://claude.ai/" target="_blank" rel="noopener">Claude<small>Use if you already have access or prefer it.</small></a>
+</div><div class="workmode"><h2>WORK MODE</h2><p>Upload or paste one real resource. Transform it into the format you actually need, then compare the new version to the original before using it.</p></div><div class="next-junction"><div class="cycle-mini"><span>PLAN</span><span class="active">DO</span><span>STUDY</span><span>ACT</span></div>
+<h3>What next?</h3>
+<div class="next-grid">
+<button class="btn" data-openpath="designUse">Plan how students will use the new version</button>
+<button class="btn" data-openpath="feedback">Plan a check for learning / experience</button>
+<button class="btn secondary" data-openpath="canvasHtml">Put/refine it in Canvas HTML</button>
+</div></div>`
+ ]},
+
+ version2:{title:"Use Evidence to Shape the Next Version",color:"red",sub:"RED | ACT / RESPOND",steps:[
+  `<div class="product-banner"><strong>You are making</strong>One concrete next-version change based on evidence.</div>
+   <h2>How much guidance?</h2><div class="support-options"><button class="choice" data-jump="1">Take me to the next-version planner.</button><button class="choice" data-jump="2">Walk me through possible moves.</button><button class="choice" data-jump="3">Show me how AI can help revise without replacing my work.</button></div>`,
+  `<div class="workmode"><h2>WORK MODE</h2><div class="prompt">KEEP:
+EVIDENCE I AM RESPONDING TO:
+SMALL CHANGE / RE-EMBED:
+WHERE STUDENTS WILL SEE IT:
+HOW I WILL CHECK AGAIN:</div></div><div class="next-junction"><div class="cycle-mini"><span>PLAN</span><span>DO</span><span>STUDY</span><span class="active">ACT</span></div>
+<h3>You have a next-version decision. What now?</h3>
+<div class="next-grid">
+<button class="btn" data-openpath="rework">Use AI to make the revision</button>
+<button class="btn" data-openpath="canvasHtml">Revise the Canvas page</button>
+<button class="btn" data-openpath="qti">Build another assessment / mastery version</button>
+<button class="btn secondary" data-openpath="tryVersion">Plan when and how students will experience it</button>
+</div></div>`,
+  `<h2>Possible ACT moves</h2><div class="choice-grid"><button class="choice">Keep going</button><button class="choice">Re-embed a concept tomorrow</button><button class="choice">Bring it back in retrieval / cases</button><button class="choice">Add a teacher stop</button><button class="choice">Revise the Canvas page</button><button class="choice">Revise the paper guide</button><button class="choice">Create another mastery opportunity</button><button class="choice">Ask another question first</button></div><div class="callout">A weak result does not automatically mean "make a remediation worksheet."</div><button class="btn" data-jump="1">Plan my move</button>`,
+  `<h2>Use AI only if it makes the change faster</h2><div class="tool-links">
+<a class="tool-link" href="https://gemini.google.com/" target="_blank" rel="noopener">Gemini<small>Available to staff through TigerID in the district portal.</small></a>
+<a class="tool-link" href="https://www.magicschool.ai/" target="_blank" rel="noopener">MagicSchool<small>Available to staff through TigerID in the district portal.</small></a>
+<a class="tool-link" href="https://chatgpt.com/" target="_blank" rel="noopener">ChatGPT<small>Use if you already have access or prefer it.</small></a>
+<a class="tool-link" href="https://claude.ai/" target="_blank" rel="noopener">Claude<small>Use if you already have access or prefer it.</small></a>
+</div><div class="prompt">Here is the material students already used and the evidence I collected afterward. Preserve what is already working. Help me make this specific change: [describe it]. Do not rebuild the whole lesson. Show me only the sections that need revision.</div><button class="btn" data-jump="1">Plan where the revision goes</button>`
+ ]},
+
+ qti:{title:"Move an Existing Quiz into Canvas New Quizzes",color:"yellow",sub:"YELLOW | DO / BUILD",steps:[
+  `<div class="product-banner"><strong>You are making</strong>An import-ready QTI 2.1 package and a working Canvas New Quiz.</div>
+   <h2>What do you already know?</h2><div class="support-options">
+    <button class="choice" data-jump="3">I know how to import QTI. Take me to AI + build.</button>
+    <button class="choice" data-jump="1">Show me exactly how to import into New Quizzes.</button>
+    <button class="choice" data-jump="2">Give me the quick import refresher.</button>
+   </div>`,
+  `<h2>Canvas New Quizzes import tutorial</h2>
+   <div class="qti-shot"><img src="assets/qti-01.png" alt="Canvas Quizzes page with Quiz Survey button"><p>1. Open Quizzes and choose + Quiz/Survey.</p></div>
+   <div class="qti-shot"><img src="assets/qti-02.png" alt="Quiz setup page with Build button"><p>2. Create the shell and choose Build.</p></div>
+   <div class="qti-shot"><img src="assets/qti-03.png" alt="New Quizzes three-dot menu"><p>3. In Build, open the three-dot menu.</p></div>
+   <div class="qti-shot"><img src="assets/qti-04.png" alt="Import Content menu item"><p>4. Choose Import Content.</p></div>
+   <div class="qti-shot"><img src="assets/qti-05.png" alt="QTI import dialog"><p>5. Browse for or drag in the QTI .zip and import.</p></div>
+   <button class="btn" data-jump="3">Got it. Make my QTI package.</button>`,
+  `<h2>Quick refresher</h2><p><strong>Quizzes → + Quiz/Survey → create shell → Build → ⋮ → Import Content → upload QTI .zip.</strong></p><button class="btn" data-jump="3">Make my package</button>`,
+  `<h2>Use AI to package the questions you already have</h2>
+   <div class="callout"><strong>Specify QTI 2.1.</strong> Do not just ask for a "Canvas quiz file."</div>
+   <div class="tool-links">
+<a class="tool-link" href="https://gemini.google.com/" target="_blank" rel="noopener">Gemini<small>Available to staff through TigerID in the district portal.</small></a>
+<a class="tool-link" href="https://www.magicschool.ai/" target="_blank" rel="noopener">MagicSchool<small>Available to staff through TigerID in the district portal.</small></a>
+<a class="tool-link" href="https://chatgpt.com/" target="_blank" rel="noopener">ChatGPT<small>Use if you already have access or prefer it.</small></a>
+<a class="tool-link" href="https://claude.ai/" target="_blank" rel="noopener">Claude<small>Use if you already have access or prefer it.</small></a>
+</div>
+   <div class="prompt">Create an importable QTI 2.1 package for Canvas New Quizzes using the questions I provide. Preserve the question wording, answer choices, correct answers, and point values. Do not add new instructional content. Return the completed .zip package for import.</div>
+   <div class="workmode"><h2>WORK MODE</h2><p>Use a real quiz or assessment. Generate the .zip, import it, and then verify the result in Canvas.</p></div><div class="next-junction"><div class="cycle-mini"><span>PLAN</span><span class="active">DO</span><span>STUDY</span><span>ACT</span></div>
+<h3>After students take it...</h3>
+<div class="next-grid">
+<button class="btn" data-openpath="evidence">Study the performance data</button>
+<button class="btn" data-openpath="version2">Plan another mastery opportunity / next version</button>
+<button class="btn secondary" data-openpath="feedback">Pair performance data with student experience feedback</button>
+</div></div>`,
+  `<h2>Verify before students see it</h2><div class="checklist"><ul class="mini"><li>question text</li><li>answer choices</li><li>correct answers</li><li>point values</li><li>images / media</li></ul></div><p>If another mastery opportunity is useful, create a second version aligned to the same target and verify it the same way.</p>`
+ ]},
+
+ courseContext:{title:"Give AI More Course Context",color:"yellow",sub:"YELLOW | DO / BUILD",steps:[
+  `<div class="product-banner"><strong>You are making</strong>A repeatable way to ask course-level questions using your own existing materials.</div>
+   <h2>What support do you want?</h2><div class="support-options"><button class="choice" data-jump="2">I already know how to upload course files. Give me useful prompts.</button><button class="choice" data-jump="1">Walk me through what context to provide and what not to include.</button></div>`,
+  `<h2>Context tutorial</h2><div class="tutorial-step"><strong>Provide:</strong> course pages, readings, packets, assessments, unit sequence, terminology, or a Canvas export.</div><div class="tutorial-step"><strong>Do not provide:</strong> personally identifiable student information.</div><div class="tutorial-step"><strong>Ask course-level questions:</strong> where has this concept appeared, what vocabulary is established, what is being repeated, what would fit next?</div><button class="btn" data-jump="2">Use the prompts</button>`,
+  `<h2>Open your preferred tool</h2><div class="tool-links">
+<a class="tool-link" href="https://gemini.google.com/" target="_blank" rel="noopener">Gemini<small>Available to staff through TigerID in the district portal.</small></a>
+<a class="tool-link" href="https://www.magicschool.ai/" target="_blank" rel="noopener">MagicSchool<small>Available to staff through TigerID in the district portal.</small></a>
+<a class="tool-link" href="https://chatgpt.com/" target="_blank" rel="noopener">ChatGPT<small>Use if you already have access or prefer it.</small></a>
+<a class="tool-link" href="https://claude.ai/" target="_blank" rel="noopener">Claude<small>Use if you already have access or prefer it.</small></a>
+</div><div class="prompt">Where have students already encountered [concept]?
+What terminology has already been introduced?
+Compare this proposed lesson with earlier materials.
+Where might I be repeating something students already did?
+Help me build the next material in a way that fits the existing course.</div><div class="workmode"><h2>WORK MODE</h2><p>Ask one real course-context question you would otherwise have to answer manually.</p></div>`
+ ]},
+
+ flexUse:{title:"Use Materials Flexibly in the Room",color:"red",sub:"RED | ACT / RESPOND / RESPOND",steps:[
+  `<div class="product-banner"><strong>You are making</strong>A delivery plan for one upcoming lesson.</div>
+   <h2>How much structure do you want?</h2><div class="support-options"><button class="choice" data-jump="1">Take me to the planner.</button><button class="choice" data-jump="2">Walk me through the decisions.</button></div>`,
+  `<div class="workmode"><h2>WORK MODE</h2><div class="prompt">STUDENTS WILL BE:
+I WANT TO BE:
+I NEED ACCESS TO:
+THE DISPLAY / DEVICE WILL DO:
+PAPER WILL DO:
+STUDENTS CAN KEEP WORKING WITHOUT ME BY:</div></div>`,
+  `<h2>Make the tool serve the interaction</h2><div class="tutorial-step"><strong>Where are students?</strong> Whole class, pods, small group, individual, or moving between modes.</div><div class="tutorial-step"><strong>Where do you need to be?</strong> Front, circulating, beside a group, conferencing.</div><div class="tutorial-step"><strong>What must travel with you?</strong> Canvas, visual, student work, annotation, model, packet.</div><div class="tutorial-step"><strong>What tools are available?</strong> Newline, iPad, laptop, paper, shared display. Choose the tool after the instructional need.</div><button class="btn" data-jump="1">Plan my lesson</button>`
+ ]},
+
+ designUse:{title:"Design Materials for How You Actually Teach",color:"red",sub:"RED | ACT / RESPOND / RESPOND",steps:[
+  `<div class="product-banner"><strong>You are making</strong>One format change that better supports how you use the material in class.</div>
+   <h2>Do you want the quick audit or a walkthrough?</h2><div class="support-options"><button class="choice" data-jump="1">Quick audit.</button><button class="choice" data-jump="2">Walk me through it with an example.</button></div>`,
+  `<div class="workmode"><h2>WORK MODE</h2><div class="prompt">Can students find what they need?
+Can I point to / model the important part?
+Does the page or packet support the way I teach?
+Can students continue when I move to another group?
+Is anything duplicated without a purpose?
+ONE FORMAT CHANGE I WILL MAKE:</div></div>`,
+  `<h2>Example: format can evolve with use</h2><div class="img-pair"><img src="assets/yellow-canvas-old.png" alt="Earlier Canvas page"><img src="assets/yellow-canvas-new.png" alt="Current Canvas page"></div><p>The earlier version was not wrong. The newer version better supports a different way of teaching from the page.</p><button class="btn" data-jump="1">Audit my material</button>`
+ ]},
+
+ tryVersion:{title:"Try the Next Version",color:"red",sub:"RED | ACT / RESPOND",steps:[
+  `<div class="product-banner"><strong>You are making</strong>An implementation plan with a specific next check.</div>
+   <h2>How much support?</h2><div class="support-options"><button class="choice" data-jump="1">Give me the planner.</button><button class="choice" data-jump="2">Walk me through keeping the change small and measurable.</button></div>`,
+  `<div class="workmode"><h2>WORK MODE</h2><div class="prompt">I AM TRYING:
+STUDENTS WILL EXPERIENCE:
+I WILL WATCH FOR:
+I WILL CHECK AGAIN USING:
+DATE / CLASS:</div></div><div class="next-junction"><div class="cycle-mini"><span>PLAN</span><span>DO</span><span>STUDY</span><span class="active">ACT</span></div>
+<h3>Close the cycle</h3>
+<div class="next-grid">
+<button class="btn" data-openpath="feedback">Build the next feedback / formative check</button>
+<button class="btn" data-openpath="evidence">I already have new evidence. Study it.</button>
+<button class="btn secondary" data-openpath="closeLoop">Tell students what changed and why</button>
+</div></div>`,
+  `<h2>Keep the cycle short enough to learn</h2><div class="tutorial-step"><strong>Change one visible thing.</strong> Avoid changing five variables at once.</div><div class="tutorial-step"><strong>Decide what evidence matters.</strong> Learning evidence, experience evidence, or both.</div><div class="tutorial-step"><strong>Name the next check.</strong> Friday Form, quick ungraded check, student work, observation, or conversation.</div><button class="btn" data-jump="1">Plan my next version</button>`
+ ]}
+
+};
+
+const overlay=document.getElementById("overlay");
+const runnerBody=document.getElementById("runnerBody");
+const runnerTitle=document.getElementById("runnerTitle");
+const runnerSub=document.getElementById("runnerSub");
+const runnerChip=document.getElementById("runnerChip");
+const progressBar=document.getElementById("progressBar");
+const nextBtn=document.getElementById("nextBtn");
+const backBtn=document.getElementById("backBtn");
+const closeRunner=document.getElementById("closeRunner");
+const toolboxBtn=document.getElementById("toolboxBtn");
+let activePath=null,activeStep=0;
+
+function render(){
+  const p=paths[activePath];
+  runnerTitle.textContent=p.title;
+  runnerSub.textContent=p.sub||"";
+  runnerChip.style.background=colors[p.color]||colors.neutral;
+  runnerBody.innerHTML=p.steps.map((s,i)=>`<div class="step ${i===activeStep?"active":""}">${s}</div>`).join("");
+  progressBar.style.width=((activeStep+1)/p.steps.length*100)+"%";
+  progressBar.style.background=colors[p.color]||colors.neutral;
+  backBtn.disabled=activeStep===0;
+  backBtn.style.opacity=activeStep===0?".45":"1";
+  nextBtn.textContent=activeStep===p.steps.length-1?"Done":"Next";
+
+  // Choice buttons can be selected without navigating.
+  runnerBody.querySelectorAll(".choice").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const grid=btn.closest(".choice-grid");
+      if(grid && grid.dataset.single==="true"){
+        grid.querySelectorAll(".choice").forEach(b=>b.classList.remove("selected"));
+      }
+      btn.classList.toggle("selected");
+
+      if(activePath==="chooser" && btn.dataset.recommend){
+        const result=document.getElementById("chooserResult");
+        const target=paths[btn.dataset.recommend];
+        result.style.display="block";
+        result.innerHTML=`<strong>Try:</strong> ${target.title}<br><span style="color:#666">${target.sub||""}</span>`;
+      }
+    });
+  });
+
+  // Navigation actions work on ANY button/link, not only .choice buttons.
+  runnerBody.querySelectorAll("[data-jump]").forEach(btn=>{
+    btn.addEventListener("click",(e)=>{
+      e.preventDefault();
+      activeStep=Number(btn.dataset.jump);
+      render();
+    });
+  });
+
+  runnerBody.querySelectorAll("[data-openpath]").forEach(btn=>{
+    btn.addEventListener("click",(e)=>{
+      e.preventDefault();
+      openPath(btn.dataset.openpath);
+    });
+  });
+}
+function openPath(key){
+  activePath=key; activeStep=0;
+  overlay.classList.add("open");
+  overlay.setAttribute("aria-hidden","false");
+  render();
+  setTimeout(()=>closeRunner.focus(),0);
+}
+function closePath(){
+  overlay.classList.remove("open");
+  overlay.setAttribute("aria-hidden","true");
+}
+document.querySelectorAll("[data-path]").forEach(b=>b.addEventListener("click",()=>openPath(b.dataset.path)));
+nextBtn.addEventListener("click",()=>{
+  const p=paths[activePath];
+  if(activeStep<p.steps.length-1){activeStep++;render()} else closePath();
+});
+backBtn.addEventListener("click",()=>{if(activeStep>0){activeStep--;render()}});
+closeRunner.addEventListener("click",closePath);
+toolboxBtn.addEventListener("click",closePath);
+overlay.addEventListener("click",e=>{if(e.target===overlay)closePath()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&overlay.classList.contains("open"))closePath()});
+</script>
+</body>
+</html>
